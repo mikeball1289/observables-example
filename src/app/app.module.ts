@@ -1,18 +1,19 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CoreModule } from './core';
+import { ClickCounterModule } from './click-counter';
+import { CommonModule } from '@angular/common';
+import { AsyncOpsModule } from './async-ops';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [
+        CoreModule,
+        CommonModule,
+        ClickCounterModule,
+        AsyncOpsModule
+    ],
 })
-export class AppModule { }
+export class AppModule {}

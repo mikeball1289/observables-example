@@ -9,7 +9,7 @@ export class SquareOpService {
         return of(n ** 2).pipe(
             delay(1000),
             tap(() => {
-                if (n !== 0 && n % 3 === 0) {
+                if (n !== 0 && n % 10 === 0) {
                     throw new Error('API failure');
                 }
             }),

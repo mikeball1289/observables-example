@@ -1,5 +1,5 @@
 import { Observable, of } from 'rxjs';
-import { startWith, map, catchError, share } from 'rxjs/operators';
+import { startWith, map, catchError } from 'rxjs/operators';
 export enum LoadingStatus {
     Pending = 'Pending',
     Loaded = 'Loaded',

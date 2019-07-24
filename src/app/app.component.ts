@@ -1,9 +1,9 @@
-import { LoadingValue, LoadingStatus, isLoaded, loadedValue, beginLoading } from './load-status';
+import { LoadingValue, beginLoading } from './load-status';
 import { SquareOpService } from './async-ops/square-op.service';
 import { ClickCounter } from './click-counter/click-counter';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, flatMap, share, filter } from 'rxjs/operators';
+import { map, switchMap, flatMap } from 'rxjs/operators';
 
 @Component({
     selector: 'app-component',
@@ -15,7 +15,8 @@ export class AppComponent {
     clickCounter$: Observable<number>;
     squareOpSync$: Observable<number>;
 
-    squareOpAsync$: Observable<LoadingValue<number>>;
+    squareOpAsyncFlat$: Observable<LoadingValue<number>>;
+    squareOpAsyncSwitch$: Observable<LoadingValue<number>>;
 
     constructor(
         protected readonly clickCounter: ClickCounter,
@@ -30,8 +31,11 @@ export class AppComponent {
         );
 
         // Perform an async operation on the data (like recalculating availability)
-        this.squareOpAsync$ = clickCounter.counter$.pipe(
+        this.squareOpAsyncFlat$ = clickCounter.counter$.pipe(
             flatMap(n => beginLoading(this.squareOpService.computeSquareOf(n)))
+        );
+        this.squareOpAsyncSwitch$ = clickCounter.counter$.pipe(
+            switchMap(n => beginLoading(this.squareOpService.computeSquareOf(n)))
         );
     }
 

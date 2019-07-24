@@ -3,8 +3,21 @@
     Number of clicks squared (sync): {{ squareOpSync$ | async }} <br />
     <!-- Within the template, subscribe to the loading value we want so we can check its load state and unpack it's value -->
     <!-- This could be abstracted into another component -->
-    <span *ngIf="(squareOpAsync$ | async) as squareOp">
-        Number of clicks squared (async):
+    <span *ngIf="(squareOpAsyncFlat$ | async) as squareOp">
+        Number of clicks squared (async using flatMap):
+        <span *ngIf="squareOp.status === 'Loaded'">
+            {{ squareOp.value }}
+        </span>
+        <span *ngIf="squareOp.status === 'Pending'">
+            Loading...
+        </span>
+        <span *ngIf="squareOp.status === 'Error'">
+            An error occurred
+        </span>
+    </span>
+    <br />
+    <span *ngIf="(squareOpAsyncSwitch$ | async) as squareOp">
+        Number of clicks squared (async using switchMap):
         <span *ngIf="squareOp.status === 'Loaded'">
             {{ squareOp.value }}
         </span>

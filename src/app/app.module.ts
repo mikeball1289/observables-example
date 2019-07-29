@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { CoreModule } from './core';
+import { LoadingModule } from './loading-component';
 import { ClickCounterModule } from './click-counter';
-import { CommonModule } from '@angular/common';
 import { AsyncOpsModule } from './async-ops';
+import { ResetCounterModule } from './reset-counter/reset-counter.module';
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -13,7 +15,9 @@ import { AsyncOpsModule } from './async-ops';
         CoreModule,
         CommonModule,
         ClickCounterModule,
-        AsyncOpsModule
+        AsyncOpsModule,
+        LoadingModule,
+        ResetCounterModule
     ],
 })
 export class AppModule {}

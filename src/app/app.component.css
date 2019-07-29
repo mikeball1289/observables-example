@@ -2,3 +2,12 @@
     line-height: 2em;
     font-size: 24pt;
 }
+
+ul {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+li {
+    line-height: 1em;
+}

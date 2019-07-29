@@ -1,0 +1,3 @@
+<ng-content *ngIf="loadingStatus === 'Loaded'"></ng-content>
+<span *ngIf="loadingStatus === 'Pending'">Loading...</span>
+<span *ngIf="loadingStatus === 'Error'">An error occurred</span>

@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { startWith, map, catchError } from 'rxjs/operators';
+
 export enum LoadingStatus {
     Pending = 'Pending',
     Loaded = 'Loaded',
@@ -12,22 +13,21 @@ export interface LoadedValue<T> {
 }
 
 export interface LoadingErrorValue {
-    value: undefined;
     status: LoadingStatus.Error;
+    error: any;
 }
 
 export interface LoadingPendingValue {
-    value: undefined;
     status: LoadingStatus.Pending;
 }
 
-export function LoadStatus(status: LoadingStatus.Error): LoadingErrorValue;
+export function LoadStatus(status: LoadingStatus.Error, error: any): LoadingErrorValue;
 export function LoadStatus(status: LoadingStatus.Pending): LoadingPendingValue;
-export function LoadStatus<T>(status: LoadingStatus.Loaded, value: T): LoadingValue<T>;
-export function LoadStatus<T>(status: LoadingStatus, value?: T): LoadingValue<T> {
+export function LoadStatus<T>(status: LoadingStatus.Loaded, value: T): LoadedValue<T>;
+export function LoadStatus<T>(status: LoadingStatus, value?: any): LoadingValue<T> {
     return {
-        value,
-        status
+        status,
+        [status === LoadingStatus.Error ? 'message' : 'value']: value
     } as LoadingValue<T>;
 }
 
@@ -51,7 +51,7 @@ export function beginLoading<T>(obs: Observable<T>) {
     return obs.pipe(
         map(v => LoadStatus(LoadingStatus.Loaded, v)),
         startWith(LoadStatus(LoadingStatus.Pending)),
-        catchError(() => of(LoadStatus(LoadingStatus.Error)))
+        catchError(err => of(LoadStatus(LoadingStatus.Error, err)))
     );
 }
 

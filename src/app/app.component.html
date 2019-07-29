@@ -1,32 +1,43 @@
+<button (click)="onButtonClick()">Click Me!</button>&nbsp;<app-reset-counter></app-reset-counter>
 <p>
     Number of clicks: {{ clickCounter$ | async }} <br />
     Number of clicks squared (sync): {{ squareOpSync$ | async }} <br />
-    <!-- Within the template, subscribe to the loading value we want so we can check its load state and unpack it's value -->
-    <!-- This could be abstracted into another component -->
+
     <span *ngIf="(squareOpAsyncFlat$ | async) as squareOp">
         Number of clicks squared (async using flatMap):
-        <span *ngIf="squareOp.status === 'Loaded'">
-            {{ squareOp.value }}
-        </span>
-        <span *ngIf="squareOp.status === 'Pending'">
-            Loading...
-        </span>
-        <span *ngIf="squareOp.status === 'Error'">
-            An error occurred
-        </span>
+        <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
     </span>
     <br />
+
+    <span *ngIf="(squareOpAsyncConcat$ | async) as squareOp">
+        Number of clicks squared (async using concatMap):
+        <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
+    </span>
+    <br />
+
+    <span *ngIf="(squareOpAsyncExhaust$ | async) as squareOp">
+        Number of clicks squared (async using exhaustMap):
+        <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
+    </span>
+    <br />
+
     <span *ngIf="(squareOpAsyncSwitch$ | async) as squareOp">
         Number of clicks squared (async using switchMap):
-        <span *ngIf="squareOp.status === 'Loaded'">
-            {{ squareOp.value }}
-        </span>
-        <span *ngIf="squareOp.status === 'Pending'">
-            Loading...
-        </span>
-        <span *ngIf="squareOp.status === 'Error'">
-            An error occurred
-        </span>
+        <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
     </span>
+    <br />
+
+    <span *ngIf="(multiOp$ | async) as multiOp">
+        Mixed clicks in with some async numbers:
+        <app-loading-component [loadingStatus]="multiOp.status">
+            <ul>
+                <li *ngFor="let loadingObs of multiOp.value">
+                    <app-loading-component [loadingStatus]="loadingObs.status">
+                        {{loadingObs.value}}
+                    </app-loading-component>
+                </li>
+            </ul>
+        </app-loading-component>
+    </span>
+    <br />
 </p>
-<button (click)="onButtonClick()">Click Me!</button>

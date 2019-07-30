@@ -56,22 +56,22 @@ export class AppComponent {
             switchMap(n => beginLoading(this.squareOpService.computeSquareOf(n)))
         );
 
-        // Perform an async operation using async data
-        this.multiOp$ = clickCounter.counter$.pipe(
-            switchMap(n => beginLoading(this.addFromNumberSource(n)))
+        this.numberList$ = clickCounter.counter$.pipe(
+            scan<number>((acc, n) => [...acc, n], [])
         );
 
         this.totalSum$ = clickCounter.counter$.pipe(
             scan((acc, n) => acc + n, 0)
         );
 
-        // These last two might be too advanced?
+        // These last two might be too complicated?
         this.totalSumAsync$ = clickCounter.counter$.pipe(
             mergeScan((acc: LoadingValue<number>, n) => this.loadingSumAccumulator(acc, n), LoadStatus(LoadingStatus.Loaded, 0), 1)
         );
 
-        this.numberList$ = clickCounter.counter$.pipe(
-            scan<number>((acc, n) => [...acc, n], [])
+        // Perform an async operation using async data
+        this.multiOp$ = clickCounter.counter$.pipe(
+            switchMap(n => beginLoading(this.addFromNumberSource(n)))
         );
     }
 

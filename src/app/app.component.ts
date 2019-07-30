@@ -1,10 +1,10 @@
 import { AddOpService } from './async-ops/add-op.service';
-import { LoadingValue, beginLoading } from './load-wrapper';
+import { LoadingValue, beginLoading, isLoaded, LoadStatus, LoadingStatus } from './load-wrapper';
 import { SquareOpService } from './async-ops/square-op.service';
 import { ClickCounter } from './click-counter/click-counter';
 import { Component } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map, switchMap, flatMap, concatMap, exhaustMap } from 'rxjs/operators';
+import { Observable, combineLatest, of } from 'rxjs';
+import { map, switchMap, flatMap, concatMap, exhaustMap, reduce, scan, mergeScan } from 'rxjs/operators';
 import { NumberSourceOpService } from './async-ops/number-source-op.service';
 
 @Component({
@@ -23,6 +23,10 @@ export class AppComponent {
     squareOpAsyncSwitch$: Observable<LoadingValue<number>>;
 
     multiOp$: Observable<LoadingValue<LoadingValue<number>[]>>;
+
+    totalSum$: Observable<number>;
+    totalSumAsync$: Observable<LoadingValue<number>>;
+    numberList$: Observable<number[]>;
 
     constructor(
         protected readonly clickCounter: ClickCounter,
@@ -56,6 +60,19 @@ export class AppComponent {
         this.multiOp$ = clickCounter.counter$.pipe(
             switchMap(n => beginLoading(this.addFromNumberSource(n)))
         );
+
+        this.totalSum$ = clickCounter.counter$.pipe(
+            scan((acc, n) => acc + n, 0)
+        );
+
+        // These last two might be too advanced?
+        this.totalSumAsync$ = clickCounter.counter$.pipe(
+            mergeScan((acc: LoadingValue<number>, n) => this.loadingSumAccumulator(acc, n), LoadStatus(LoadingStatus.Loaded, 0), 1)
+        );
+
+        this.numberList$ = clickCounter.counter$.pipe(
+            scan<number>((acc, n) => [...acc, n], [])
+        );
     }
 
     onButtonClick() {
@@ -66,5 +83,12 @@ export class AppComponent {
         return this.numberSourceService.getSomeNumbers().pipe(
             flatMap(numbers => combineLatest(numbers.map(n => beginLoading(this.addOpService.computeSumOf(counter, n)))))
         );
+    }
+
+    loadingSumAccumulator(acc: LoadingValue<number>, n: number) {
+        if (!isLoaded(acc)) {
+            return of(acc);
+        }
+        return beginLoading(this.addOpService.computeSumOf(acc.value, n));
     }
 }

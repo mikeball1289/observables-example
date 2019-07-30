@@ -27,6 +27,15 @@
     </span>
     <br />
 
+    Sum of # of clicks: {{ totalSum$ | async }} <br />
+    <span *ngIf="(totalSumAsync$ | async) as totalSumAsync">
+        Sum of # of clicks (async addition):
+        <app-loading-component [loadingStatus]="totalSumAsync.status">{{ totalSumAsync.value }}</app-loading-component>
+    </span>
+    <br />
+    
+    Emitted values so far: {{ numberList$ | async }} <br />
+
     <span *ngIf="(multiOp$ | async) as multiOp">
         Mixed clicks in with some async numbers:
         <app-loading-component [loadingStatus]="multiOp.status">

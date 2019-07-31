@@ -13,6 +13,7 @@ import { NumberSourceOpService } from './async-ops/number-source-op.service';
     templateUrl: './app.component.html',
 })
 export class AppComponent {
+    readonly showTheBadStuff = false;
 
     clickCounter$: Observable<number>;
     squareOpSync$: Observable<number>;

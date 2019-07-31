@@ -1,5 +1,5 @@
 <button (click)="onButtonClick()">Click Me!</button>&nbsp;<app-reset-counter></app-reset-counter>
-<p>
+<p *ngIf="!showTheBadStuff">
     Number of clicks: {{ clickCounter$ | async }} <br />
     Number of clicks squared (sync): {{ squareOpSync$ | async }} <br />
 
@@ -50,3 +50,4 @@
     </span>
     <br />
 </p>
+<app-terrible *ngIf="showTheBadStuff"></app-terrible>

@@ -1,0 +1,7 @@
+<div>
+    <button (click)="onUpdateClicked()">Click to update</button><br />
+    <span>The current number is: {{ numberValue }}</span><br />
+    <span>And adding from the number source: </span>
+    <span *ngIf="loading">Loading...</span>
+    <span *ngIf="!loading">{{ sumNumbers }}</span>
+</div>

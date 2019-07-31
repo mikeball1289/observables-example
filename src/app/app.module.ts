@@ -7,6 +7,7 @@ import { LoadingModule } from './loading-component';
 import { ClickCounterModule } from './click-counter';
 import { AsyncOpsModule } from './async-ops';
 import { ResetCounterModule } from './reset-counter/reset-counter.module';
+import { TerribleModule } from './terrible';
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -17,7 +18,8 @@ import { ResetCounterModule } from './reset-counter/reset-counter.module';
         ClickCounterModule,
         AsyncOpsModule,
         LoadingModule,
-        ResetCounterModule
+        ResetCounterModule,
+        TerribleModule
     ],
 })
 export class AppModule {}

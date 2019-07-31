@@ -5,13 +5,11 @@ Object.defineProperty(document, 'doctype', {
 });
 
 Object.defineProperty(window, 'getComputedStyle', {
-    value: () =>
-    {
+    value: () => {
         return {
             display: 'none',
             appearance: ['-webkit-appearance'],
-            getPropertyValue: (prop) =>
-            {
+            getPropertyValue: () => {
                 return '';
             }
         };
@@ -23,8 +21,7 @@ Object.defineProperty(window, 'getComputedStyle', {
  * Workaround for JSDOM missing transform property
  */
 Object.defineProperty(document.body.style, 'transform', {
-    value: () =>
-    {
+    value: () => {
         return {
             enumerable: true,
             configurable: true,
@@ -35,28 +32,3 @@ Object.defineProperty(document.body.style, 'transform', {
 Object.defineProperty(window, 'matchMedia', {
     value: () => ({ matches: true })
 });
-
-// Avoid console warns about window.crypto not being present, and falling back on Math.Random() when generating GUIDs
-var nodeCrypto = require('crypto');
-Object.defineProperty(window, 'crypto', {
-    value: {
-        getRandomValues: (buffer) => nodeCrypto.randomFillSync(buffer)
-    }
-});
-
-// Workaround for failing to load @markpieszak/ng-application-insights package
-Object.defineProperty(window, 'define', { value: () => { } });
-
-// const storageMock = () =>
-// {
-//     let storage = {};
-//     return {
-//         getItem: key => key in storage ? storage[key] : null,
-//         setItem: (key, value) => storage[key] = value || '',
-//         removeItem: key => delete storage[key],
-//         clear: () => storage = {},
-//     };
-// };
-
-// Object.defineProperty(window, 'localStorage', { value: storageMock() });
-// Object.defineProperty(window, 'sessionStorage', { value: storageMock() });

@@ -5,8 +5,7 @@ type MockOf<T> = T extends Function ? jest.Mock<ReturnType<T>, any> : T;
 // Turn all functions in a given type into mocks of those functions. Leave non-functions unnaffected
 export type MockProxy<T> = { [TP in keyof T]: MockOf<T[TP]> };
 
-export function MockProxy<T>(withBase: Partial<T> = {}): MockProxy<T>
-{
+export function MockProxy<T>(withBase: Partial<T> = {}): MockProxy<T> {
     const handler = {
         // Angular uses '$quoted$' in the module compiler to find quoted properties
         // We don't need to worry about that here it just needs to be iterable

@@ -23,11 +23,12 @@ export class AppComponent {
     squareOpAsyncExhaust$: Observable<LoadingValue<number>>;
     squareOpAsyncSwitch$: Observable<LoadingValue<number>>;
 
-    multiOp$: Observable<LoadingValue<LoadingValue<number>[]>>;
-
-    totalSum$: Observable<number>;
-    totalSumAsync$: Observable<LoadingValue<number>>;
     numberList$: Observable<number[]>;
+    totalSum$: Observable<number>;
+    
+    totalSumAsync$: Observable<LoadingValue<number>>;
+
+    multiOp$: Observable<LoadingValue<LoadingValue<number>[]>>;
 
     constructor(
         protected readonly clickCounter: ClickCounter,
@@ -60,14 +61,15 @@ export class AppComponent {
         this.numberList$ = clickCounter.counter$.pipe(
             scan<number>((acc, n) => [...acc, n], [])
         );
-
+        
         this.totalSum$ = clickCounter.counter$.pipe(
             scan((acc, n) => acc + n, 0)
         );
 
-        // These last two might be too complicated?
+    
         this.totalSumAsync$ = clickCounter.counter$.pipe(
-            mergeScan((acc: LoadingValue<number>, n) => this.loadingSumAccumulator(acc, n), LoadStatus(LoadingStatus.Loaded, 0), 1)
+            mergeScan((acc: LoadingValue<number>, n) => this.loadingSumAccumulator(acc, n)
+                        , LoadStatus(LoadingStatus.Loaded, 0), 1)
         );
 
         // Perform an async operation using async data
@@ -82,8 +84,11 @@ export class AppComponent {
 
     addFromNumberSource(counter: number): Observable<LoadingValue<number>[]> {
         return this.numberSourceService.getSomeNumbers().pipe(
-            flatMap(numbers => combineLatest(numbers.map(n => beginLoading(this.addOpService.computeSumOf(counter, n)))))
+            flatMap(numbers => combineLatest(
+                numbers.map(
+                    n => beginLoading(this.addOpService.computeSumOf(counter, n)))))
         );
+
     }
 
     loadingSumAccumulator(acc: LoadingValue<number>, n: number) {
@@ -92,4 +97,5 @@ export class AppComponent {
         }
         return beginLoading(this.addOpService.computeSumOf(acc.value, n));
     }
+
 }

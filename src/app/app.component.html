@@ -2,31 +2,33 @@
 <p *ngIf="!showTheBadStuff">
     Number of clicks: {{ clickCounter$ | async }} <br />
     Number of clicks squared (sync): {{ squareOpSync$ | async }} <br />
-
+    
     <span *ngIf="(squareOpAsyncFlat$ | async) as squareOp">
         Number of clicks squared (async using flatMap):
         <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
     </span>
     <br />
-
+    
     <span *ngIf="(squareOpAsyncConcat$ | async) as squareOp">
         Number of clicks squared (async using concatMap):
         <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
     </span>
     <br />
-
+    
     <span *ngIf="(squareOpAsyncExhaust$ | async) as squareOp">
         Number of clicks squared (async using exhaustMap):
         <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
     </span>
     <br />
-
+    
     <span *ngIf="(squareOpAsyncSwitch$ | async) as squareOp">
         Number of clicks squared (async using switchMap):
         <app-loading-component [loadingStatus]="squareOp.status">{{squareOp.value}}</app-loading-component>
     </span>
     <br />
-
+    
+    Emitted values so far: {{ numberList$ | async }} <br />
+    
     Sum of # of clicks: {{ totalSum$ | async }} <br />
     <span *ngIf="(totalSumAsync$ | async) as totalSumAsync">
         Sum of # of clicks (async addition):
@@ -34,8 +36,6 @@
     </span>
     <br />
     
-    Emitted values so far: {{ numberList$ | async }} <br />
-
     <span *ngIf="(multiOp$ | async) as multiOp">
         Mixed clicks in with some async numbers:
         <app-loading-component [loadingStatus]="multiOp.status">
